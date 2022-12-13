@@ -1,3 +1,16 @@
+[project]
+name = "fastcom-cli"
+description = "Unofficial CLI for fast.com"
+readme = "README.md"
+urls = {repo = "https://github.com/Tina-otoge/fastcom-cli"}
+dependencies = [
+    "requests",
+]
+dynamic = ["version"]
+
+[project.scripts]
+fastcom = "fastcom.__main__:main"
+
 [build-system]
 requires = ["setuptools", "setuptools_scm[toml]"]
 

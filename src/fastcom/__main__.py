@@ -1,6 +1,10 @@
+import importlib.metadata
 from argparse import ArgumentDefaultsHelpFormatter, ArgumentParser
 
 from .test import SpeedTestGroup
+
+__pkg__ = "fastcom-cli"
+__version__ = importlib.metadata.version(__pkg__)
 
 
 def main():
@@ -40,6 +44,12 @@ def main():
             "Controls the percentage of results to trim from the top and bottom"
             ' of the results for the "Mean (trimmed)" value'
         ),
+    )
+    parser.add_argument(
+        "-v",
+        "--version",
+        action="version",
+        version=f"{__pkg__} {__version__}",
     )
     args = parser.parse_args()
 
