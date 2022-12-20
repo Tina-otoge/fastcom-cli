@@ -1,6 +1,7 @@
+from dataclasses import dataclass
 import json
 import sys
-from dataclasses import dataclass
+import time
 
 import requests
 
@@ -72,7 +73,8 @@ class SpeedTestGroup:
         data = response.json()
         self.tests = [SpeedTest(x["url"]) for x in data.get("targets", [])]
 
-    def run(self, verbose, json_output):
+    def loop(self, verbose, timeout):
+        start = time.time()
         for i in range(self.iterations):
             self.current_iteration = i
             self.refresh()
@@ -86,6 +88,17 @@ class SpeedTestGroup:
                 if verbose:
                     print(self)
                     print("-" * 28)
+                elapsed = time.time() - start
+                if elapsed > timeout:
+                    if verbose:
+                        print(
+                            f"Timeout of {timeout} seconds reached, stopping"
+                            " early"
+                        )
+                    return
+
+    def run(self, verbose, json_output, timeout):
+        self.loop(verbose, timeout)
         if json_output:
             json.dump(
                 {
@@ -95,7 +108,7 @@ class SpeedTestGroup:
                     "mean": self.mean,
                     "mean_trimmed": self.mean_trimmed,
                     "max": self.max.speed,
-                    "last": self.last.speed,
+                    "last": self.last and self.last.speed,
                 },
                 sys.stdout,
                 indent=2,

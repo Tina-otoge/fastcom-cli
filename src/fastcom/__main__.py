@@ -1,5 +1,5 @@
-import importlib.metadata
 from argparse import ArgumentDefaultsHelpFormatter, ArgumentParser
+import importlib.metadata
 
 from .test import SpeedTestGroup
 
@@ -36,7 +36,7 @@ def main():
         help="Outputs a JSON formatted summary (implies --quiet)",
     )
     parser.add_argument(
-        "-t",
+        "-r",
         "--trim",
         type=int,
         default=10,
@@ -44,6 +44,13 @@ def main():
             "Controls the percentage of results to trim from the top and bottom"
             ' of the results for the "Mean (trimmed)" value'
         ),
+    )
+    parser.add_argument(
+        "-t",
+        "--timeout",
+        type=int,
+        default=60,
+        help="Controls the number of seconds to wait before stopping all tests",
     )
     parser.add_argument(
         "-v",
@@ -59,7 +66,9 @@ def main():
     group = SpeedTestGroup(
         servers=args.servers, iterations=args.iterations, trim=args.trim
     )
-    group.run(verbose=not args.quiet, json_output=args.json)
+    group.run(
+        verbose=not args.quiet, json_output=args.json, timeout=args.timeout
+    )
 
 
 if __name__ == "__main__":
