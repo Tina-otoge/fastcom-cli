@@ -8,7 +8,7 @@ service.*
 pip install --user fastcom-cli
 ```
 
-### Usage
+## Usage
 
 ```
 fastcom [-h] [-q] [-i ITERATIONS] [-s SERVERS] [-j] [-r TRIM] [-t TIMEOUT] [-v]
